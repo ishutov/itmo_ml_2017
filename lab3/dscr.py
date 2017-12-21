@@ -17,15 +17,6 @@ def parse_dataset():
 	return ds_attributes, ds_class
 	
 
-def train_split_dataset(occ_attr, occ_class, test_size, rnd_state):
-	data_train, data_test, class_train, class_test = train_test_split(occ_attr, occ_class, test_size=test_size, random_state=rnd_state)
-
-	print_dataset_info(class_train, data_train)
-	print_dataset_info(class_test, data_test)
-
-	return data_train, data_test, class_train, class_test
-
-
 def visualize_data(is2d, is3d, is2plots, seed_attr=None, seed_class=None, data_train=None, data_test=None,
                    class_train=None, class_test=None):
     if is2d is True:
@@ -142,21 +133,28 @@ def discriminant_analysis(fanalysis, data_train, data_test, class_train, class_t
     print('The accuracy of classification on the test data set')
     print('{:.2%}'.format(metrics.accuracy_score(class_test, pred_test)))
 
-
-def print_dataset_info(seed_class, seed_attr):
-    print('Number of records:', seed_class.shape[0])
-    print('Number of characters:', seed_attr.shape[1])
-
-    print('Class 0 (Kama): {:.2%}'.format(list(seed_class).count(1) / seed_class.shape[0]))
-    print('Class 1 (Rosa): {:.2%}'.format(list(seed_class).count(2) / seed_class.shape[0]))
-    print('Class 2 (Canadian): {:.2%}'.format(list(seed_class).count(3) / seed_class.shape[0]))
-
 	
 def main():
     seed_attr, seed_class = parse_dataset()
-    print_dataset_info(seed_class, seed_attr)
+    data_train, data_test, class_train, class_test = train_test_split(seed_attr, seed_class, test_size=0.3, random_state=55)
 	
-    data_train, data_test, class_train, class_test = train_split_dataset(seed_attr, seed_class, 0.3, 55)
+    print('Number of records:', seed_class.shape[0])
+    print('Number of attrs:', seed_attr.shape[1])
+    print('Class 0 (Kama): {:.2%}'.format(list(seed_class).count(1) / seed_class.shape[0]))
+    print('Class 1 (Rosa): {:.2%}'.format(list(seed_class).count(2) / seed_class.shape[0]))
+    print('Class 2 (Canadian): {:.2%}'.format(list(seed_class).count(3) / seed_class.shape[0]))
+	
+    print('Number of records:', class_train.shape[0])
+    print('Number of attrs:', data_train.shape[1])
+    print('Class 0 (Kama): {:.2%}'.format(list(class_train).count(1) / class_train.shape[0]))
+    print('Class 1 (Rosa): {:.2%}'.format(list(class_train).count(2) / class_train.shape[0]))
+    print('Class 2 (Canadian): {:.2%}'.format(list(class_train).count(3) / class_train.shape[0]))
+	
+    print('Number of records:', class_test.shape[0])
+    print('Number of attrs:', data_test.shape[1])
+    print('Class 0 (Kama): {:.2%}'.format(list(class_test).count(1) / class_test.shape[0]))
+    print('Class 1 (Rosa): {:.2%}'.format(list(class_test).count(2) / class_test.shape[0]))
+    print('Class 2 (Canadian): {:.2%}'.format(list(class_test).count(3) / class_test.shape[0]))
 
     visualize_data(is2d=True, is3d=True, is2plots=True, seed_attr=seed_attr, seed_class=seed_class,
                    data_train=data_train, data_test=data_test, class_train=class_train, class_test=class_test)
